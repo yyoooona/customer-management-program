@@ -1,5 +1,6 @@
 import os
 import pickle
+import re
 
 cust_list = []
 page = -1
@@ -32,8 +33,13 @@ while True:
     if choice == "I": 
         print("고객 정보 입력 로직")
         customer = {"name": "", "gender": "", "email": "", "birthyear": ""}
-        name = input("이름을 입력 하세요 : ")
-
+        while True:
+            regex = re.compile("[a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]")
+            name = input("이름을 입력 하세요 : ")
+            if regex.search(name):
+                break
+            else :
+                print("한글 또는 영어만 사용해서 입력하세요.")
         while True:
             gender = input("성별(M/F)을 입력 하세요 : ").upper()
             if gender in ("M", "F"):
@@ -43,9 +49,19 @@ while True:
 
         while True:
             email = input("이메일 주소를 입력 하세요 : ")
-            if email.find("@") > -1:  # True, False 0 == False, -2 == True
+            email_check = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z]+.[a-zA-Z]+$')
+            if email_check.search(email):
                 break
-        birthyear = input("출생 년도를 입력 하세요 : ")
+            else :
+                print("올바른 이메일 양식으로 입력하세요 (ex. example@example.com)")
+            #if email.find("@") > -1:  # True, False 0 == False, -2 == True
+            #    break
+        
+        while True:
+            birth_check = re.compile('^[0-9]{4}$')
+            birthyear = input("출생 년도 4자리를 입력 하세요 : ")
+            if birth_check.search(birthyear):
+                break
 
         customer["name"] = name
         customer["gender"] = gender
